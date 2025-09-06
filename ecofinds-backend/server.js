@@ -12,17 +12,14 @@ const userRoutes = require('./routes/users.route');
 const productRoutes = require('./routes/products.route');
 const cartRoutes = require('./routes/cart.route');
 const purchaseRoutes = require('./routes/purchases.route');
-const aiRoutes = require('./routes/ai.route');   // 👈 ADDED THIS LINE
+const aiRoutes = require('./routes/ai.route');   // 👈 AI Routes
 
 const app = express();
 
-// Connect to MongoDB
-connectDB();
-
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000, 
+  max: 100, 
   message: 'Too many requests from this IP, please try again later.'
 });
 
@@ -38,18 +35,33 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/purchases', purchaseRoutes);
-app.use('/api/ai', aiRoutes);   // 👈 ADDED THIS LINE
+app.use('/api/ai', aiRoutes);
 
+// ✅ Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
 
-// Error handling middleware (should be last)
+// Error handling middleware (last)
 app.use(errorHandler);
-
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// ✅ Bind server first, then connect to DB
+app.listen(PORT, '0.0.0.0', async () => {
+  console.log(`✅ Server running at http://localhost:${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV}`);
+
+  try {
+    await connectDB();
+    console.log("✅ MongoDB Connected");
+  } catch (err) {
+    console.error(" MongoDB connection failed:", err.message);
+  }
 });
 
 module.exports = app;
