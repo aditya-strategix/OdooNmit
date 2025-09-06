@@ -1,0 +1,19 @@
+# Ignore common folders
+node_modules/
+dist/
+build/
+.env/
+__pycache__/
+logs/
+tmp/
+.cache/
+.idea/
+.vscode/
+.DS_Store
+*.egg-info/
+.migrations/
+staticfiles/
+media/
+uploads/
+test-results/
+coverage/
