@@ -1,0 +1,7 @@
+# Node.js
+ecofinds-backend/node_modules/
+ecofinds-backend/.env
+
+# React / Frontend
+ecofinds-frontend/node_modules/
+ecofinds-frontend/build/
