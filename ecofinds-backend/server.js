@@ -4,7 +4,7 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const connectDB = require('./config/database');  
-const errorHandler = require('./middleware/errorHandler');
+const errorHandler = require('./middlewares/errorHandler');
 
 // Import routes
 const authRoutes = require('./routes/auth.route');
@@ -40,25 +40,10 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/purchases', purchaseRoutes);
 app.use('/api/ai', aiRoutes);   // 👈 ADDED THIS LINE
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'OK',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime()
-  });
-});
 
 // Error handling middleware (should be last)
 app.use(errorHandler);
 
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found'
-  });
-});
 
 const PORT = process.env.PORT || 3000;
 
