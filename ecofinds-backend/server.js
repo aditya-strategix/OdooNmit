@@ -3,7 +3,7 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
-const connectDB = require('./config/database');
+const connectDB = require('./config/database');  
 const errorHandler = require('./middleware/errorHandler');
 
 // Import routes
@@ -12,6 +12,7 @@ const userRoutes = require('./routes/users.route');
 const productRoutes = require('./routes/products.route');
 const cartRoutes = require('./routes/cart.route');
 const purchaseRoutes = require('./routes/purchases.route');
+const aiRoutes = require('./routes/ai.route');   // 👈 ADDED THIS LINE
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/purchases', purchaseRoutes);
+app.use('/api/ai', aiRoutes);   // 👈 ADDED THIS LINE
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
